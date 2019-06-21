@@ -4,5 +4,7 @@
     <string name="title_explore">Explore</string>
     <string name="title_favorites">Favorites</string>
     <string name="title_history">History</string>
+    <string name="favorite">Favorite</string>
+    <string name="clear">Clear</string>
 
 </resources>
