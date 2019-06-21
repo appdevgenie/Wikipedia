@@ -2,6 +2,7 @@ package com.appdevgenie.wikipedia.activities.fragments
 
 
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,7 +15,9 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.appdevgenie.wikipedia.R
 import com.appdevgenie.wikipedia.activities.SearchActivity
+import com.appdevgenie.wikipedia.activities.WikiApplication
 import com.appdevgenie.wikipedia.activities.adapters.ArticleCardRecyclerAdapter
+import com.appdevgenie.wikipedia.activities.managers.WikiManager
 import com.appdevgenie.wikipedia.activities.providers.ArticleDataProvider
 
 // TODO: Rename parameter arguments, choose names that match
@@ -28,12 +31,19 @@ private const val ARG_PARAM2 = "param2"
  */
 class ExploreFragment : Fragment() {
 
-    private val articleProvider: ArticleDataProvider = ArticleDataProvider()
+    //private val articleProvider: ArticleDataProvider = ArticleDataProvider()
+    private var wikiManager: WikiManager? = null
 
     var searchCardView: CardView? = null
     var exploreRecycler: RecyclerView? = null
     var adapter: ArticleCardRecyclerAdapter = ArticleCardRecyclerAdapter()
     var refresher: SwipeRefreshLayout? = null
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+
+        wikiManager = (activity?.applicationContext as WikiApplication).wikiManager
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -65,7 +75,7 @@ class ExploreFragment : Fragment() {
 
     private fun getRandomArticles(){
         try{
-            articleProvider.getRandom(15, { wikiResult ->
+            wikiManager?.getRandom(15, { wikiResult ->
                 adapter.currentResults.clear()
                 adapter.currentResults.addAll(wikiResult.query!!.pages)
                 activity?.runOnUiThread {
