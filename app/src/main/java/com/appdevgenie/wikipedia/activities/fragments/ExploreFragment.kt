@@ -4,21 +4,18 @@ package com.appdevgenie.wikipedia.activities.fragments
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.cardview.widget.CardView
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-
 import com.appdevgenie.wikipedia.R
 import com.appdevgenie.wikipedia.activities.SearchActivity
 import com.appdevgenie.wikipedia.activities.adapters.ArticleCardRecyclerAdapter
-import com.appdevgenie.wikipedia.activities.models.WikiResult
 import com.appdevgenie.wikipedia.activities.providers.ArticleDataProvider
-import kotlinx.android.synthetic.main.fragment_explore.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -36,7 +33,7 @@ class ExploreFragment : Fragment() {
     var searchCardView: CardView? = null
     var exploreRecycler: RecyclerView? = null
     var adapter: ArticleCardRecyclerAdapter = ArticleCardRecyclerAdapter()
-    //var refresher: SwipeRefreshLayout? = null
+    var refresher: SwipeRefreshLayout? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,7 +44,7 @@ class ExploreFragment : Fragment() {
 
         searchCardView = view.findViewById(R.id.search_card_view)
         exploreRecycler = view.findViewById(R.id.explore_article_recycler)
-        //refresher = view.findViewById<SwipeRefreshLayout>(R.id.refresher)
+        refresher = view.findViewById<SwipeRefreshLayout>(R.id.refresher)
 
         searchCardView!!.setOnClickListener {
             val searchIntent = Intent(context, SearchActivity::class.java)
@@ -57,9 +54,9 @@ class ExploreFragment : Fragment() {
         exploreRecycler!!.layoutManager = LinearLayoutManager(context)
         exploreRecycler!!.adapter = adapter
 
-        /*refresher?.setOnRefreshListener {
+        refresher?.setOnRefreshListener {
             getRandomArticles()
-        }*/
+        }
 
         getRandomArticles()
 
@@ -73,7 +70,7 @@ class ExploreFragment : Fragment() {
                 adapter.currentResults.addAll(wikiResult.query!!.pages)
                 activity?.runOnUiThread {
                     adapter.notifyDataSetChanged()
-                    //refresher?.isRefreshing = false
+                    refresher?.isRefreshing = false
                 }
             })
         }catch (ex :Exception){
