@@ -34,7 +34,7 @@ class FavoriteFragment : Fragment() {
 
         favoriteRecycler = view.findViewById(R.id.favorites_article_recycler)
         favoriteRecycler!!.layoutManager = LinearLayoutManager(context)
-        //favoriteRecycler!!.adapter = ArticleCardRecyclerAdapter()
+        favoriteRecycler!!.adapter = ArticleCardRecyclerAdapter()
 
         return view
     }

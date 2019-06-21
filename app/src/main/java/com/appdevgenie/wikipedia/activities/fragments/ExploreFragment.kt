@@ -1,6 +1,7 @@
 package com.appdevgenie.wikipedia.activities.fragments
 
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -10,10 +11,13 @@ import android.view.ViewGroup
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 
 import com.appdevgenie.wikipedia.R
 import com.appdevgenie.wikipedia.activities.SearchActivity
 import com.appdevgenie.wikipedia.activities.adapters.ArticleCardRecyclerAdapter
+import com.appdevgenie.wikipedia.activities.models.WikiResult
+import com.appdevgenie.wikipedia.activities.providers.ArticleDataProvider
 import kotlinx.android.synthetic.main.fragment_explore.*
 
 // TODO: Rename parameter arguments, choose names that match
@@ -27,8 +31,12 @@ private const val ARG_PARAM2 = "param2"
  */
 class ExploreFragment : Fragment() {
 
+    private val articleProvider: ArticleDataProvider = ArticleDataProvider()
+
     var searchCardView: CardView? = null
     var exploreRecycler: RecyclerView? = null
+    var adapter: ArticleCardRecyclerAdapter = ArticleCardRecyclerAdapter()
+    //var refresher: SwipeRefreshLayout? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,6 +47,7 @@ class ExploreFragment : Fragment() {
 
         searchCardView = view.findViewById(R.id.search_card_view)
         exploreRecycler = view.findViewById(R.id.explore_article_recycler)
+        //refresher = view.findViewById<SwipeRefreshLayout>(R.id.refresher)
 
         searchCardView!!.setOnClickListener {
             val searchIntent = Intent(context, SearchActivity::class.java)
@@ -46,10 +55,34 @@ class ExploreFragment : Fragment() {
         }
 
         exploreRecycler!!.layoutManager = LinearLayoutManager(context)
-        //exploreRecycler!!.adapter = ArticleCardRecyclerAdapter()
+        exploreRecycler!!.adapter = adapter
+
+        /*refresher?.setOnRefreshListener {
+            getRandomArticles()
+        }*/
+
+        getRandomArticles()
 
         return view
     }
 
+    private fun getRandomArticles(){
+        try{
+            articleProvider.getRandom(15, { wikiResult ->
+                adapter.currentResults.clear()
+                adapter.currentResults.addAll(wikiResult.query!!.pages)
+                activity?.runOnUiThread {
+                    adapter.notifyDataSetChanged()
+                    //refresher?.isRefreshing = false
+                }
+            })
+        }catch (ex :Exception){
+            // show alert
+            val builder = AlertDialog.Builder(activity)
+            builder.setMessage(ex.message).setTitle("oops!")
+            val dialog = builder.create()
+            dialog.show()
+        }
+    }
 
 }

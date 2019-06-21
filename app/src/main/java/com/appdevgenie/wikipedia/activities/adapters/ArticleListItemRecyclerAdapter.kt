@@ -6,12 +6,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.appdevgenie.wikipedia.R
 import com.appdevgenie.wikipedia.activities.holders.CardHolder
 import com.appdevgenie.wikipedia.activities.holders.ListItemHolder
+import com.appdevgenie.wikipedia.activities.models.WikiPage
 
 class ArticleListItemRecyclerAdapter : RecyclerView.Adapter<ListItemHolder>(){
 
+    val currentResults : ArrayList<WikiPage> = ArrayList()
 
     override fun onBindViewHolder(holder: ListItemHolder, position: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+        var page = currentResults[position]
+        holder.updateWithPage(page)
     }
 
 
@@ -21,7 +25,7 @@ class ArticleListItemRecyclerAdapter : RecyclerView.Adapter<ListItemHolder>(){
     }
 
     override fun getItemCount(): Int {
-        return 15
+        return currentResults.size
     }
 
 

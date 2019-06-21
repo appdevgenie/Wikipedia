@@ -32,7 +32,7 @@ class HistoryFragment : Fragment() {
 
         historyRecycler = view.findViewById(R.id.history_article_recycler)
         historyRecycler!!.layoutManager = LinearLayoutManager(context)
-        //historyRecycler!!.adapter = ArticleListItemRecyclerAdapter()
+        historyRecycler!!.adapter = ArticleListItemRecyclerAdapter()
 
         return view
     }
